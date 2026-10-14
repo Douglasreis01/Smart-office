@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#660099" />
+  <title>Smart Offers | Painel de Gestão</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">v</div>
+        <div>
+          <strong>SMART OFFERS</strong>
+          <span>Painel de gestão</span>
+        </div>
+      </div>
+      <nav class="nav-menu" aria-label="Navegação principal">
+        <a class="nav-link active" href="#visao-geral"><span>▦</span> Visão geral</a>
+        <a class="nav-link" href="#campanhas"><span>◉</span> Campanhas</a>
+        <a class="nav-link" href="#chgs"><span>⇄</span> CHGs e ajustes</a>
+        <a class="nav-link" href="#qa"><span>✓</span> QA e qualidade</a>
+        <a class="nav-link" href="#entregas"><span>▤</span> Entregas</a>
+        <a class="nav-link" href="#destaques"><span>✦</span> Destaques do mês</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note">
+          <span class="status-dot"></span>
+          <div><strong>Modo de edição</strong><small>Dados salvos neste navegador</small></div>
+        </div>
+        <button class="btn btn-outline btn-full" id="exportBtn" type="button">Exportar dados JSON</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark">v</span><strong>SMART OFFERS</strong></div>
+        <div class="breadcrumbs">Vivo B2C Pré-Pago <span>/</span> Gestão mensal</div>
+        <div class="top-actions">
+          <label class="month-control">
+            <span>Mês de referência</span>
+            <input id="monthInput" type="month" value="2026-09" />
+          </label>
+          <button class="avatar" id="editHeaderBtn" type="button" title="Editar responsável">SO</button>
+        </div>
+      </header>
+
+      <section class="page-heading" id="visao-geral">
+        <div>
+          <p class="eyebrow">PAINEL OPERACIONAL</p>
+          <h1>Smart Offers <span class="heading-period" id="headingPeriod">| Setembro 2026</span></h1>
+          <p class="page-subtitle">Visibilidade das campanhas, mudanças, testes e entregas mensais.</p>
+        </div>
+        <div class="heading-actions">
+          <span class="updated-label" id="updatedLabel">Ainda não atualizado</span>
+          <button class="btn btn-outline" id="templateBtn" type="button">Baixar modelo Excel</button>
+          <button class="btn btn-outline" id="importBtn" type="button">Importar planilha Excel</button>
+          <input id="importFile" type="file" accept=".xlsx,.xls,.xlsm,.csv" hidden />
+          <button class="btn btn-primary" id="saveBtn" type="button">Salvar alterações</button>
+        </div>
+      </section>
+
+      <section class="metadata-panel panel">
+        <div class="field-group">
+          <label for="ownerInput">Responsável pela atualização</label>
+          <input id="ownerInput" type="text" placeholder="Digite o nome do responsável" />
+        </div>
+        <div class="field-group">
+          <label>Área</label>
+          <div class="static-field">Vivo B2C Pré-Pago</div>
+        </div>
+        <div class="field-group">
+          <label>Período selecionado</label>
+          <div class="static-field" id="periodLabel">Setembro de 2026</div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <div><p class="eyebrow">RESUMO EXECUTIVO</p><h2>Smart Offers em números</h2></div>
+          <span class="section-hint">Clique em um valor para editar</span>
+        </div>
+        <div class="kpi-grid">
+          <article class="kpi-card">
+            <div class="kpi-top"><span class="kpi-icon purple">⇄</span><button class="icon-btn edit-kpi" data-kpi="chgs" aria-label="Editar CHGs">✎</button></div>
+            <p class="kpi-label">CHGs implantadas</p>
+            <button class="kpi-value editable-number" data-kpi="chgs" type="button">—</button>
+            <p class="kpi-description">Mudanças implantadas no período</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-top"><span class="kpi-icon lilac">⌁</span><button class="icon-btn edit-kpi" data-kpi="qaTested" aria-label="Editar QA">✎</button></div>
+            <p class="kpi-label">Campanhas testadas em QA</p>
+            <button class="kpi-value editable-number" data-kpi="qaTested" type="button">—</button>
+            <p class="kpi-description">Campanhas únicas testadas</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-top"><span class="kpi-icon green">✓</span><button class="icon-btn edit-kpi" data-kpi="qaApproved" aria-label="Editar aprovadas">✎</button></div>
+            <p class="kpi-label">Aprovadas em QA</p>
+            <button class="kpi-value editable-number" data-kpi="qaApproved" type="button">—</button>
+            <p class="kpi-description">Campanhas com aprovação registrada</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-top"><span class="kpi-icon orange">↗</span><button class="icon-btn edit-kpi" data-kpi="published" aria-label="Editar publicadas">✎</button></div>
+            <p class="kpi-label">Campanhas publicadas</p>
+            <button class="kpi-value editable-number" data-kpi="published" type="button">—</button>
+            <p class="kpi-description">Publicações efetivadas no período</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-top"><span class="kpi-icon blue">▤</span><button class="icon-btn edit-kpi" data-kpi="completed" aria-label="Editar entregas">✎</button></div>
+            <p class="kpi-label">Entregas concluídas</p>
+            <button class="kpi-value editable-number" data-kpi="completed" type="button">—</button>
+            <p class="kpi-description">Atividades finalizadas no período</p>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-top"><span class="kpi-icon red">◷</span><button class="icon-btn edit-kpi" data-kpi="pending" aria-label="Editar pendências">✎</button></div>
+            <p class="kpi-label">Pendências em aberto</p>
+            <button class="kpi-value editable-number" data-kpi="pending" type="button">—</button>
+            <p class="kpi-description">Itens aguardando conclusão</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-block two-column">
+        <article class="panel chart-panel">
+          <div class="section-heading compact"><div><p class="eyebrow">ACOMPANHAMENTO</p><h2>Status das campanhas</h2></div></div>
+          <div class="chart-wrap"><canvas id="campaignChart" aria-label="Gráfico de status das campanhas"></canvas><p class="empty-chart" id="campaignChartEmpty">Cadastre campanhas para visualizar o gráfico.</p></div>
+        </article>
+        <article class="panel chart-panel">
+          <div class="section-heading compact"><div><p class="eyebrow">QUALIDADE</p><h2>Resultados de QA</h2></div></div>
+          <div class="chart-wrap"><canvas id="qaChart" aria-label="Gráfico de resultados de QA"></canvas><p class="empty-chart" id="qaChartEmpty">Cadastre testes de QA para visualizar o gráfico.</p></div>
+        </article>
+      </section>
+
+      <section class="section-block panel" id="campanhas">
+        <div class="section-heading">
+          <div><p class="eyebrow">PORTFÓLIO MENSAL</p><h2>Campanhas do mês</h2><p class="section-description">Registre as campanhas trabalhadas e acompanhe seus status.</p></div>
+          <button class="btn btn-primary" id="addCampaignBtn" type="button">＋ Nova campanha</button>
+        </div>
+        <div class="table-toolbar"><input id="campaignSearch" class="search-input" type="search" placeholder="Buscar campanha..." /><span id="campaignCount" class="muted">0 campanhas</span></div>
+        <div class="table-responsive">
+          <table><thead><tr><th>Campanha</th><th>Tipo de ação</th><th>Status</th><th>Data</th><th>Área solicitante</th><th></th></tr></thead>
+          <tbody id="campaignTableBody"></tbody></table>
+        </div>
+        <div class="empty-state" id="campaignEmpty">Nenhuma campanha cadastrada. Clique em “Nova campanha” para começar.</div>
+      </section>
+
+      <section class="section-block panel" id="chgs">
+        <div class="section-heading">
+          <div><p class="eyebrow">MUDANÇAS E AJUSTES</p><h2>CHGs e ajustes Express</h2><p class="section-description">Acompanhe mudanças implantadas e ajustes realizados nas campanhas.</p></div>
+          <button class="btn btn-primary" id="addChgBtn" type="button">＋ Adicionar CHG</button>
+        </div>
+        <div class="mini-summary">
+          <div><span>CHGs abertas</span><button class="mini-value editable-number" data-kpi="chgsOpen" type="button">—</button></div>
+          <div><span>Ajustes Express</span><button class="mini-value editable-number" data-kpi="express" type="button">—</button></div>
+          <div><span>Campanhas impactadas</span><button class="mini-value editable-number" data-kpi="impacted" type="button">—</button></div>
+        </div>
+        <div class="table-responsive">
+          <table><thead><tr><th>ID da CHG</th><th>Descrição do ajuste</th><th>Campanha</th><th>Implantação</th><th>Status</th><th></th></tr></thead>
+          <tbody id="chgTableBody"></tbody></table>
+        </div>
+        <div class="empty-state" id="chgEmpty">Nenhuma CHG cadastrada.</div>
+      </section>
+
+      <section class="section-block panel" id="qa">
+        <div class="section-heading">
+          <div><p class="eyebrow">QUALIDADE E VALIDAÇÃO</p><h2>Testes em QA</h2><p class="section-description">Registre resultados, correções e aprovações.</p></div>
+          <button class="btn btn-primary" id="addQaBtn" type="button">＋ Adicionar teste</button>
+        </div>
+        <div class="mini-summary">
+          <div><span>Reprovadas</span><button class="mini-value editable-number" data-kpi="qaRejected" type="button">—</button></div>
+          <div><span>Aguardando validação</span><button class="mini-value editable-number" data-kpi="qaWaiting" type="button">—</button></div>
+          <div><span>Retestes realizados</span><button class="mini-value editable-number" data-kpi="retests" type="button">—</button></div>
+        </div>
+        <div class="table-responsive">
+          <table><thead><tr><th>Campanha</th><th>Data do teste</th><th>Resultado</th><th>Correção</th><th>Observações</th><th></th></tr></thead>
+          <tbody id="qaTableBody"></tbody></table>
+        </div>
+        <div class="empty-state" id="qaEmpty">Nenhum teste registrado.</div>
+      </section>
+
+      <section class="section-block panel" id="entregas">
+        <div class="section-heading">
+          <div><p class="eyebrow">VOLUME OPERACIONAL</p><h2>Entregas e atividades</h2><p class="section-description">Registre demandas e atividades realizadas, inclusive as que não geram CHG.</p></div>
+          <button class="btn btn-primary" id="addDeliveryBtn" type="button">＋ Nova entrega</button>
+        </div>
+        <div class="table-responsive">
+          <table><thead><tr><th>Descrição</th><th>Categoria</th><th>Recebida em</th><th>Conclusão prevista</th><th>Status</th><th></th></tr></thead>
+          <tbody id="deliveryTableBody"></tbody></table>
+        </div>
+        <div class="empty-state" id="deliveryEmpty">Nenhuma entrega cadastrada.</div>
+      </section>
+
+      <section class="section-block panel" id="destaques">
+        <div class="section-heading"><div><p class="eyebrow">CONTEXTO E PRÓXIMOS PASSOS</p><h2>Destaques do mês</h2><p class="section-description">Registre o que a equipe e a coordenação precisam saber.</p></div></div>
+        <div class="notes-grid">
+          <label class="note-card"><span>✦ Principais entregas</span><textarea data-note="highlights" placeholder="Quais foram as entregas mais relevantes?"></textarea></label>
+          <label class="note-card"><span>↗ Resultados e melhorias</span><textarea data-note="results" placeholder="Registre resultados comprovados e melhorias de processo."></textarea></label>
+          <label class="note-card"><span>! Pontos de atenção</span><textarea data-note="attention" placeholder="Pendências, riscos, dependências ou impedimentos."></textarea></label>
+          <label class="note-card"><span>→ Próximos passos</span><textarea data-note="nextSteps" placeholder="Ações prioritárias para o próximo período."></textarea></label>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div><strong>SMART OFFERS</strong><span> Painel mensal de gestão · Vivo B2C Pré-Pago</span></div>
+        <span>Dados preenchidos manualmente · <span id="footerPeriod">Setembro de 2026</span></span>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="recordDialog" class="record-dialog">
+    <form id="recordForm" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow" id="dialogEyebrow">REGISTRO</p><h2 id="dialogTitle">Adicionar registro</h2></div><button type="button" class="icon-btn" id="closeDialogBtn" aria-label="Fechar">✕</button></div>
+      <div id="dialogFields" class="dialog-fields"></div>
+      <div class="dialog-actions"><button type="button" class="btn btn-outline" id="cancelDialogBtn">Cancelar</button><button type="submit" class="btn btn-primary">Salvar registro</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="numberDialog" class="record-dialog small-dialog">
+    <form id="numberForm" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">INDICADOR</p><h2 id="numberTitle">Editar indicador</h2></div><button type="button" class="icon-btn" id="closeNumberBtn" aria-label="Fechar">✕</button></div>
+      <label class="field-group"><span>Valor</span><input id="numberValue" type="number" min="0" step="1" required /></label>
+      <div class="dialog-actions"><button type="button" class="btn btn-outline" id="cancelNumberBtn">Cancelar</button><button type="submit" class="btn btn-primary">Salvar valor</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
